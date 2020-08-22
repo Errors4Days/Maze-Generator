@@ -11,12 +11,37 @@ class Maze:
         turtle.title("Maze Generator")
         turtle.bgcolor("black")
 
-    def main(self, sides):
-        #self.setSeed(20)
+    def main(self, sides, seed = None):
+        #If value is provided, sets the seed
+        if seed != None:
+            self.setSeed(seed)
+
+        #Mapping neighbors
         self.baseMap(sides)
+        #Creates maze
         results = self.DFS(0, sides)
+
+        #Drawing the maze
+        t = turtle.Turtle()
+        s = turtle.getscreen()
         for path in results:
-            self.draw(path, sides, path[0])
+            self.draw(path, sides, path[0], t)
+
+        #Drawing start and stop
+        t.pen(pencolor="green", fillcolor="blue", pensize=12, speed=100)
+        t.up()
+        start = self.convert(0, sides)
+        t.goto(start)
+        t.down()
+        t.goto(start)
+
+        t.pen(pencolor="red", fillcolor="blue", pensize=12, speed=100)
+        t.up()
+        stop = self.convert(sides ** 2 - 1, sides)
+        t.goto(stop)
+        t.down()
+        t.goto(stop)
+        
 
     def setSeed(self,seed):
         random.seed(seed)
@@ -95,17 +120,14 @@ class Maze:
         return unexplored
 
     #Given a list of nodes, draws map accordingly
-    def draw(self, array, sides, startPoint):
-        t = turtle.Turtle()
-        s = turtle.getscreen()
-
+    def draw(self, array, sides, startPoint, t):
         coordStart = self.convert(startPoint, sides)
         
         t.up()
         t.goto(coordStart)
         t.down()
         t.ht()
-        t.pen(pencolor="white", fillcolor="orange", pensize=15, speed=100)
+        t.pen(pencolor="white", fillcolor="blue", pensize=15, speed=100)
 
         for i in array:
             coords = self.convert(i, sides)
@@ -115,12 +137,9 @@ class Maze:
     def convert(self, num, sides):
          x = num % sides
          y = int(num / sides)
-         return ((x * 20) - 300, 300 - (y * 20))        
-         
+         return ((x * 20) - 300, 300 - (y * 20))
 
+#Maze size runs from 3 to 30
 if __name__ == "__main__":
     maze = Maze(700, 700)
-    #Issue with seeds 12,13,17,20
-    maze.main(20)
-    #maze.main(30)
-    
+    maze.main(30)
