@@ -1,4 +1,5 @@
 import random, turtle
+import sys
 from collections import defaultdict
 #defaultdict acts like dict but yields default value when key not found
 
@@ -12,6 +13,8 @@ class Maze:
         turtle.bgcolor("black")
 
     def main(self, sides, seed = None):
+        if 3 > sides or sides > 30:
+            raise Exception("Maze size runs from 3 to 30")
         #If value is provided, sets the seed
         if seed != None:
             self.setSeed(seed)
@@ -23,6 +26,7 @@ class Maze:
 
         #Drawing the maze
         t = turtle.Turtle()
+        t.pen(pencolor="white", fillcolor="blue", pensize=15, speed=100)
         s = turtle.getscreen()
         for path in results:
             self.draw(path, sides, path[0], t)
@@ -42,6 +46,7 @@ class Maze:
         t.down()
         t.goto(stop)
         
+        turtle.Screen().exitonclick()
 
     def setSeed(self,seed):
         random.seed(seed)
@@ -127,7 +132,6 @@ class Maze:
         t.goto(coordStart)
         t.down()
         t.ht()
-        t.pen(pencolor="white", fillcolor="blue", pensize=15, speed=100)
 
         for i in array:
             coords = self.convert(i, sides)
@@ -142,4 +146,9 @@ class Maze:
 #Maze size runs from 3 to 30
 if __name__ == "__main__":
     maze = Maze(700, 700)
-    maze.main(30)
+    if len(sys.argv) > 2:
+        maze.main(int(sys.argv[1]), int(sys.argv[2]))
+    elif len(sys.argv) > 1:
+        maze.main(int(sys.argv[1]))
+    else:  
+        maze.main(30)
