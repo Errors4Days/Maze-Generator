@@ -24,7 +24,6 @@ class Maze:
         #Creates maze
         results = self.DFS(0, sides)
         results[0].pop(0)
-        print(results)
 
         #Drawing the maze
         t = turtle.Turtle()
